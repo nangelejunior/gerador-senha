@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gerador de Senha</title>
+		<script type="text/javascript">
+            function onlyNumber(e){
+                var tecla = (window.event) ? event.keyCode : e.which;
+				
+                if ((tecla > 47 && tecla < 58)) {
+                    return true;
+                } else {
+                    if (tecla == 8 || tecla == 0) 
+                        return true;
+                    else  
+                        return false;
+                }
+            }
+            
+            function passwordGenerator() {
+                var _characters = document.getElementById("txtCharacters").value;
+                var _min = document.getElementById("txtMin").value;
+                var _max = document.getElementById("txtMax").value;
+				
+                if (_characters.trim().length == 0) {
+                    alert("O campo Caracteres está vazio!");
+                    return false;
+                }
+				
+                if (_min.trim().length == 0 || parseInt(_min) < 6) {
+                    alert("O campo Tamanho Máximo está vazio ou é menor que 6!");
+                    return false;
+                }
+				
+                if (_max.trim().length == 0 || parseInt(_max) < parseInt(_min)) {
+                    alert("O campo Tamanho Máximo está vazio ou é menor que o campo Tamanho Mínimo!");
+                    return false;
+                }
+				
+				clearPasswords();
+				for (var i = 0; i < 20; i++) {
+					document.getElementById("txtPasswords").value += randomString(_min, _max) + "\n";
+				}
+				
+                return true;
+            }
+            
+            function randomString(_min, _max) {
+                var n = randomLength(_min, _max);
+                var b = "";
+                for (var i = 0; i < n; i++) {
+                    b += randomChar();
+				}
+                return b;
+            }
+            
+            function randomChar() {
+                var conteudo = document.getElementById("txtCharacters").value;
+                var i = Math.floor((Math.random() * 1000000000) + 1) % (conteudo.length - 1);
+                if (i < 0) {
+                    i = -i;
+				}
+                return conteudo.charAt(i);
+            }
+
+            function randomLength(_min, _max) {
+                var n = parseInt(_max) - parseInt(_min) + 1;
+                var i = Math.floor((Math.random() * 1000000000) + 1) % parseInt(n);
+                if (i < 0) {
+                    i = -i;
+				}
+                return parseInt(_min) + parseInt(i); 
+            }
+			
+			function clearPasswords() {
+				document.getElementById("txtPasswords").value = "";
+			}
+        </script>
+        <style type="text/css">
+            body {
+                font:12px Arial, Sans-serif;
+            }
+
+			h1 {
+				text-align:center;
+			}
+			
+            span { 
+                display:inline-block;
+				text-align:right;
+                width:120px;
+            }
+        </style>
+    </head>
+    <body>
+        <form>
+			<div>
+				<p>
+					<h1>Gerador de Senhas</h1>
+				</p>
+			</div>
+			<div>
+				<p>
+					<span>Caracteres:</span>
+					<input id="txtCharacters" type="text" maxLength="100" size="100" value="1234567890qwertyuiopasdfghjklzxcvbnm!@#$%&*QWERTYUIOPASDFGHJKLZXCVBNM" />
+				</p>
+			</div>
+			<div>
+				<p>
+					<span>Tamanho M&iacute;nimo:</span>
+					<input id="txtMin" type="text" maxLength="3" size="5" value="6" onKeyPress="return onlyNumber(event);" />
+				</p>
+			</div>
+			<div>
+				<p>
+					<span>Tamanho M&aacute;ximo:</span>
+					<input id="txtMax" type="text" maxLength="3" size="5" value="8" onKeyPress="return onlyNumber(event);" />
+				</p>
+			</div>
+			<div>
+				<p>
+					<span>&nbsp;</span>
+					<input type="button" value="Gerar " onClick="return passwordGenerator();" />
+					<input type="button" value="Limpar" onClick="clearPasswords();" />
+				</p>
+			</div>
+			<div>
+				<p>
+					<span style="vertical-align:top;">Senhas:</span>
+					<textarea id="txtPasswords" cols="75" rows="20"></textarea>
+				</p>
+			</div>
+        </form>
+    </body>
+</html>
